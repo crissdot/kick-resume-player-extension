@@ -6,6 +6,9 @@
   "action": {
     "default_title": "Your time in the current stream is safe"
   },
+  "permissions": [
+    "activeTab"
+  ],
   "content_scripts": [
     {
       "js": ["scripts/content.js"],

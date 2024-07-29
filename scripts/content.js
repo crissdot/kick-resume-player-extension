@@ -1,5 +1,7 @@
+const LS_CACHE = 'kick_resume_player_cache';
 let isFirstTime = true;
 let saveTimeInLSInterval;
+const videoId = window.location.href.split('kick.com/video/')[1];
 
 function waitForVideoElement() {
   const observer = new MutationObserver((mutations, me) => {
@@ -18,22 +20,24 @@ function waitForVideoElement() {
 }
 
 function addVideoPlayerListeners(player) {
+  const cacheObject = localStorage.getItem(LS_CACHE) ? JSON.parse(localStorage.getItem(LS_CACHE)) : {};
+
   player.addEventListener('play', () => {
     if (isFirstTime) {
-      console.log('Setting initial time');
-      player.currentTime = 8000;
       isFirstTime = false;
+      const currentTime = cacheObject[videoId];
+      if (currentTime) player.currentTime = currentTime;
     }
 
     saveTimeInLSInterval = setInterval(() => {
-      console.log('time', player.currentTime);
+      cacheObject[videoId] = parseInt(player.currentTime);
+      localStorage.setItem(LS_CACHE, JSON.stringify(cacheObject));
     }, 10000);
   });
 
   player.addEventListener('pause', () => {
-    console.log('Video paused', saveTimeInLSInterval);
     clearInterval(saveTimeInLSInterval);
   });
 }
 
-waitForVideoElement();
+if (!!videoId) waitForVideoElement();
