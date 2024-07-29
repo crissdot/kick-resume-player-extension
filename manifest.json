@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "kick-resume-player",
+  "description": "Continue your streams where you left them",
+  "version": "1.0",
+  "action": {
+    "default_title": "Your time in the current stream is safe"
+  },
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": [
+        "https://kick.com/video/*"
+      ]
+    }
+  ]
+}
